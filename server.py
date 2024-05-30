@@ -373,6 +373,11 @@ def _generate_image(data: dict) -> Image:
             height=data["height"],
             restore_faces=data["restore_faces"],
             enable_hr=data["enable_hr"],
+            seed=data["seed"],
+            override_settings=dict({
+                "CLIP_stop_at_last_layers": data["clip_skip"],
+            }),
+            override_settings_restore_afterwards=True,
             save_images=True,
             send_images=True,
             do_not_save_grid=False,
@@ -408,6 +413,8 @@ def api_image():
         "enable_hr": False,
         "prompt_prefix": PROMPT_PREFIX,
         "negative_prompt": NEGATIVE_PROMPT,
+        "seed": -1,
+        "clip_skip": 1,
     }
 
     data = request.get_json()
