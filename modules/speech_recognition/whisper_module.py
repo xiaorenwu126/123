@@ -13,24 +13,24 @@ References:
         - oobabooga text-generation-webui github: https://github.com/oobabooga/text-generation-webui
 """
 from flask import jsonify, abort, request
-from faster_whisper import WhisperModel
+
+import whisper
 
 DEBUG_PREFIX = "<stt whisper module>"
 RECORDING_FILE_PATH = "stt_test.wav"
 
-model_size = "large-v3-turbo"
-
-model = WhisperModel(model_size, device="cuda", compute_type="float16")
+model = None
 
 def load_model(file_path=None):
     """
     Load given vosk model from file or default to en-us model.
     Download model to user cache folder, example: C:/Users/toto/.cache/vosk
     """
+
     if file_path is None:
-        return WhisperModel(model_size, device="cuda", compute_type="float16")
+        return whisper.load_model("base.en")
     else:
-        return WhisperModel(file_path, device="cuda", compute_type="float16")
+        return whisper.load_model(file_path)
 
 def process_audio():
     """
@@ -45,10 +45,9 @@ def process_audio():
         file = request.files.get('AudioFile')
         language = request.form.get('language', default=None)
         file.save(RECORDING_FILE_PATH)
-        segments, info = model.transcribe(RECORDING_FILE_PATH, beam_size=5)
-        transcript=""
-        for segment in segments:
-            transcript=transcript+" "+segment.text
+
+        result = model.transcribe(RECORDING_FILE_PATH, condition_on_previous_text=False, language=language)
+        transcript = result["text"]
         print(DEBUG_PREFIX, "Transcripted from audio file (whisper):", transcript)
 
         return jsonify({"transcript": transcript})
