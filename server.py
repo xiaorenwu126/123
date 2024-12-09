@@ -939,7 +939,7 @@ parser.add_argument("--stt-whisper-model-path", help="Load a custom whisper spee
 
 parser.add_argument("--use-faster-whisper", action="store_true", help="Choose to use faster-whisper instead of whisper")
 parser.add_argument("--faster-whisper-cpu", action="store_true", help="Use cpu to run faster-whisper, saves VRAM but much slower")
-parser.add_argument("--faster-whisper-type", help="Choose faster-whisper compute type, defaults to float16")
+parser.add_argument("--faster-whisper-type", help="Choose faster-whisper compute type, defaults to float16 for cuda and int8 for cpu")
 
 # sd_group = parser.add_mutually_exclusive_group()
 
@@ -1186,7 +1186,7 @@ if "whisper-stt" in modules:
         faster_whisper_type=(
             args.faster_whisper_type
             if args.faster_whisper_type
-            else "float16")
+            else "auto")
 
         print(f"Initializing Faster-Whisper speech-recognition (from ST request file) on {faster_whisper_device}")
         import modules.speech_recognition.faster_whisper_module as whisper_module

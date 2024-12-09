@@ -22,17 +22,22 @@ RECORDING_FILE_PATH = "stt_test.wav"
 model_size = "large-v3-turbo"
 
 
-def load_model(file_path=None,whisper_device="cuda",whisper_compute_type='float16'):
+def load_model(file_path=None,whisper_device="cuda",whisper_compute_type="auto"):
     """
     Load given vosk model from file or default to en-us model.
     Download model to user cache folder, example: C:/Users/toto/.cache/vosk
     """
+    if whisper_compute_type=="auto":
+        whisper_compute_type=(
+            "int8"
+            if whisper_device=="cpu"
+            else "float16")
 
     if file_path is None:
-        print(f"faster-whisper using {model_size}")
+        print(f"faster-whisper using {model_size} model with {whisper_compute_type}")
         return WhisperModel(model_size, device=whisper_device, compute_type=whisper_compute_type)
     else:
-        print(f"faster-whisper using {file_path}")
+        print(f"faster-whisper using {file_path} model with {whisper_compute_type}")
         return WhisperModel(file_path, device=whisper_device, compute_type=whisper_compute_type)
 
 def process_audio():
