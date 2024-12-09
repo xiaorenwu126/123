@@ -21,6 +21,7 @@ RECORDING_FILE_PATH = "stt_test.wav"
 
 model_size = "large-v3-turbo"
 
+
 def load_model(file_path=None,whisper_device="cuda",whisper_compute_type='float16'):
     """
     Load given vosk model from file or default to en-us model.

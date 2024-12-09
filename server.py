@@ -938,7 +938,7 @@ parser.add_argument("--stt-vosk-model-path", help="Load a custom vosk speech-to-
 parser.add_argument("--stt-whisper-model-path", help="Load a custom whisper speech-to-text model")
 
 parser.add_argument("--use-faster-whisper", action="store_true", help="Choose to use faster-whisper instead of whisper")
-parser.add_argument("--faster-whisper-device", help="Choose between cpu and cuda to run faster-whisper, defaults to cuda")
+parser.add_argument("--faster-whisper-cpu", action="store_true", help="Use cpu to run faster-whisper, saves VRAM but much slower")
 parser.add_argument("--faster-whisper-type", help="Choose faster-whisper compute type, defaults to float16")
 
 # sd_group = parser.add_mutually_exclusive_group()
@@ -1179,8 +1179,8 @@ if "whisper-stt" in modules:
     if whisper_fast:
 
         faster_whisper_device=(
-            args.faster_whisper_device
-            if args.faster_whisper_device
+            "cpu"
+            if args.faster_whisper_cpu
             else "cuda")
 
         faster_whisper_type=(
