@@ -234,7 +234,7 @@ cd SillyTavern-extras
 1. Install CUDA 12 and cuDNN 8
 2. Install faster-whisper requirements
 ```
-pip install -r fasterWhisperRequirements.txt
+pip install -r requirements-faster-whisper.txt
 ```
 use the `--use-faster-whisper` argument to switch to faster-whisper
 
